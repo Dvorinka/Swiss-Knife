@@ -560,6 +560,7 @@ void drawStatusPage() {
   }
 }
 
+/**********************
  * Web Server         *
  **********************/
 void handleRoot() {
@@ -876,8 +877,8 @@ void handleRoot() {
   html += F("      `;");
   html += F("    });");
   html += F("  document.getElementById('wifi-status').textContent = WiFi.status() === 3 ? 'Connected' : 'Disconnected';");
-  html += F("  document.getElementById('sd-status').textContent = '${SD_MMC.cardSize() / (1024 * 1024)} MB';";
-  html += F("  document.getElementById('uptime').textContent = formatUptime(millis() / 1000);";
+  html += F("  document.getElementById('sd-status').textContent = '${SD_MMC.cardSize() / (1024 * 1024)} MB';");
+  html += F("  document.getElementById('uptime').textContent = formatUptime(millis() / 1000);");
   html += F("}");
   
   // Uptime formatter
@@ -964,23 +965,27 @@ void handleRoot() {
   html += F("    }");
   html += F("    ");
   html += F("    // Create a table to display the results");
-  html += F("    let table = '<table class="result-table">' +");
+  html += F("    let table = '<table class=\"result-table\">' +");
   html += F("      '<tr><th>IP Address</th><th>Hostname</th><th>Status</th><th>Services</th></tr>';");
   html += F("    ");
   html += F("    hosts.forEach(host => {");
-  html += F("      table += `<tr>");
-  html += F("        <td>${host.ip || 'N/A'}</td>");
-  html += F("        <td>${host.hostname || 'N/A'}</td>");
-  html += F("        <td>${host.status || 'Unknown'}</td>");
-  html += F("        <td>${host.services ? host.services.join(', ') : 'None detected'}</td>");
-  html += F("      </tr>`;");
+  html += F("      table += '<tr>' +");
+  html += F("        '<td>' + (host.ip || 'N/A') + '</td>' +");
+  html += F("        '<td>' + (host.hostname || 'N/A') + '</td>' +");
+  html += F("        '<td>' + (host.status || 'Unknown') + '</td>' +");
+  html += F("        '<td>' + (host.services ? host.services.join(', ') : 'None detected') + '</td>'");
+  html += F("      + '</tr>';");
   html += F("    });");
   html += F("    ");
   html += F("    table += '</table>';");
   html += F("    results.innerHTML = table;");
   html += F("  } catch (error) {");
   html += F("    console.error('Discovery error:', error);");
-  html += F("    results.innerHTML = `<p style='color: red;'>Error: ${error.message}</p>`;");
+  html += F("    var errorMsg = document.createElement('p');");
+  html += F("    errorMsg.style.color = 'red';");
+  html += F("    errorMsg.textContent = 'Error: ' + error.message;");
+  html += F("    results.innerHTML = '';");
+  html += F("    results.appendChild(errorMsg);");
   html += F("  }");
   html += F("}");
   
